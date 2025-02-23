@@ -63,6 +63,9 @@
 
 ## Variveis
 
+import random
+import string
+
 MENU = ("O que deseja fazer \n"
         "1. Gerar senha \n"
         "2. Salvar senha \n"
@@ -71,7 +74,7 @@ MENU = ("O que deseja fazer \n"
         "5. Sair\n"
         )
 
-escolhas_validas = ["1", "2", "3", "4", "5"]
+ESCOLHAS_VALIDAS = ["1", "2", "3", "4", "5"]
 
 ## Inicio do Programa
 
@@ -88,7 +91,7 @@ while escolha_usuario == '':
     escolha_usuario = input('Digite sua escolha: ')
 
 # Caso o usuario digite algo fora do esperado
-while escolha_usuario not in escolhas_validas:
+while escolha_usuario not in ESCOLHAS_VALIDAS:
     print('Escolha invalida, tente novamente por favor.')
     escolha_usuario = input('Digite sua escolha: ')
 
@@ -96,7 +99,14 @@ while escolha_usuario != "5":
 
     # 1. Gerar senha
     if escolha_usuario == "1":
-        print("gerar senha...")
+        print("OK! Vamos gerar uma senha para você!")
+        # Colocar uma verificação de segurança para o fluxo de aplicação.
+        tamanho_senha_gerada = input("Qual tamanho a senha deve ter?: ")
+        caracteres_aleatorios =  list(string.ascii_letters + string.digits + string.punctuation)
+        senha_gerada = ''.join(random.choice(caracteres_aleatorios) for _ in range(tamanho_senha_gerada))
+
+        #Apos a senha ser gerada, perguntar se o usuario deseja salvar a senha e guardar ela em uma lista.
+
         break
     elif escolha_usuario == "2":
         print("salvar senha...")
