@@ -4,11 +4,11 @@ import string
 
 ## Variveis
 MENU = ("O que deseja fazer \n"
-        "1. Gerar senha \n"
-        "2. Salvar senha \n"
-        "3. Consultar senhas\n"
-        "4. Editar/Remover \n"
-        "5. Sair\n"
+        "[1] Gerar senha \n"
+        "[2] Salvar senha \n"
+        "[3] Consultar senhas\n"
+        "[4] Editar/Remover \n"
+        "[5] Sair\n"
         )
 
 ESCOLHAS_VALIDAS = ["1", "2", "3", "4", "5"]
@@ -93,11 +93,140 @@ if chave_de_controle.lower() == "s":
                 f'A senha de {nome_senha_usuario} é {senha_usuario} \n')
             
         elif escolha_usuario == "3":
-            print('Senhas salvas:')
-            print(senhas.items())
+            if not senhas:
+                print("Nenhuma senha salva ainda.")
+            else:
+                print("Senhas salvas:")
+                for nome, senha in senhas.items():
+                    print(f"{nome}: {senha}")
             
+        ## Editar ou Remover Senhas
         elif escolha_usuario == "4":
-            print("Certo, qual senha você deseja remover: ")
+            if not senhas:
+                print("Nenhuma senha salva ainda.")
+            else:
+                ESCOLHAS_VALIDAS_OPCAO_4 = ['1', '2']
+
+                print('O que deseja fazer?\n'
+                    '[1] Editar senha\n'
+                    '[2] Remover senha')
+                
+                escolha_opcao_4 = input('Digite a opcão desejada: ')
+
+                # Verificação se está vazio
+                while escolha_opcao_4 == '':
+                    print('Você não digitou nada, por favor digite novamente.')
+                    print('O que deseja fazer?\n'
+                    '[1] Editar senha\n'
+                    '[2] Remover senha')
+                    escolha_opcao_4 = input('Digite a opcão desejada: ')
+
+                # Verificação se é um numero e se esta entre o tamanho valido
+                while escolha_opcao_4 not in ESCOLHAS_VALIDAS_OPCAO_4:
+                    print('Você precisa escolher entre a opção 1 ou 2.')
+                    print('O que deseja fazer?\n'
+                    '[1] Editar senha\n'
+                    '[2] Remover senha')
+                    escolha_opcao_4 = input('Digite a opcão desejada: ')
+
+                ## Editar senha
+                if escolha_opcao_4 == '1':
+
+                    alterando_senha = True
+
+                    while alterando_senha == True:
+
+                        for nome, senha in senhas.items():
+                            print(f"{nome}: {senha}")
+
+                        editar_senha = input('Qual a senha deseja alterar?: ')
+
+                        #Verifica se essa senha está salva
+                        while editar_senha not in senhas.keys():
+                            print(f'Não há nenhuma senha salva com o nome de "{editar_senha}"')
+
+                            print('Senhas salvas:')
+                            for nome, senha in senhas.items():
+                                print(f"{nome}: {senha}")
+
+                            editar_senha = input('Qual a senha deseja alterar?: ')
+                            
+
+                        print('O que deseja fazer?\n'
+                            '[1] Alterar nome\n'
+                            '[2] Alterar senha')
+                        sub_escolha_opcao_4 = input('Digite a opcão desejada: ')
+
+                        # Verificação se está vazio
+                        while sub_escolha_opcao_4 == '':
+                            print('Você não digitou nada, por favor digite novamente.')
+                            print('O que deseja fazer?\n'
+                            '[1] Alterar nome\n'
+                            '[2] Alterar senha')
+                            sub_escolha_opcao_4 = input('Digite a opcão desejada: ')
+
+                        # Verificação se esta valido
+                        while sub_escolha_opcao_4 not in ESCOLHAS_VALIDAS_OPCAO_4:
+                            print('Você precisa escolher entre a opção 1 ou 2.')
+                            print('O que deseja fazer?\n'
+                            '[1] Alterar nome\n'
+                            '[2] Alterar senha')
+                            sub_escolha_opcao_4 = input('Digite a opcão desejada: ')
+
+                        if sub_escolha_opcao_4 == '1':
+                            novo_nome_senha = input('Qual o novo nome da senha?: ')
+
+                            valor_senha_editada = senhas.pop(editar_senha)
+
+                            senhas.update({novo_nome_senha : valor_senha_editada})
+
+                            print(f'A senha "{editar_senha}" teve seu nome alterado para "{novo_nome_senha}."')
+
+                        if sub_escolha_opcao_4 == '2':
+                            nova_senha = input(f'Digite a nova senha para "{editar_senha}": ')
+
+                            senha_antiga = senhas.get(editar_senha)
+
+                            senhas.update({editar_senha : nova_senha})
+
+                            print(f'A senha de {editar_senha} foi alterada de "{senha_antiga}" para "{nova_senha}"')
+
+                            
+                        # Verificação de saida.
+                        alterando_senha = input("Deseja continuar editando?[S]: ")
+                        if alterando_senha.lower() == "s":
+                            alterando_senha = True
+                        else:
+                            alterando_senha = False
+                        
+
+                if escolha_opcao_4 == '2':
+                    print('Senhas salvas:')
+                    for nome, senha in senhas.items():
+                            print(f"{nome}: {senha}")
+                    print("Qual senha você deseja remover?")
+                    remover_senha = input("Digite o nome da senha: ")
+
+                    while remover_senha not in senhas.keys():
+                        print(f'Não existe nenhuma senha salva com o nome "{remover_senha}" ')
+                        print('Senhas salvas:')
+                        for nome, senha in senhas.items():
+                            print(f"{nome}: {senha}")
+                        print("Qual senha você deseja remover?")
+                        remover_senha = input("Digite o nome da senha: ")
+                        
+                    # Confirmar remoção
+                    confirmar_remocao = input('Confirma remoção da senha? [S]')
+
+                    if confirmar_remocao.lower() == 's':
+                        senhas.pop(remover_senha)
+                        print(f'Senha "{remover_senha}" removida com sucesso!')
+                    else:
+                        print(f'A senha "{remover_senha}" não foi removida. ')
+
+        elif escolha_usuario == "5":
+            break
+    
 
         # Verificação de saida.
         chave_de_controle = input("Deseja continuar?[S]: ")
@@ -108,5 +237,3 @@ if chave_de_controle.lower() == "s":
             
 
 print('Obrigado! Até logo.')
-
-controle2 = input('controle2: ')
